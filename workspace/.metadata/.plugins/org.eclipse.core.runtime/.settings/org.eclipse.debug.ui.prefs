@@ -1,0 +1,7 @@
+#Thu May 10 12:15:22 EDT 2012
+org.eclipse.debug.ui.switch_perspective_on_suspend=never
+eclipse.preferences.version=1
+org.eclipse.debug.ui.activate_debug_view=false
+org.eclipse.debug.ui.switch_to_perspective_on_suspend=never
+org.eclipse.debug.ui.switch_to_perspective=never
+org.eclipse.debug.ui.PREF_LAUNCH_PERSPECTIVES=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<launchPerspectives/>\n

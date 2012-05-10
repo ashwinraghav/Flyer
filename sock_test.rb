@@ -9,8 +9,6 @@ EventMachine.run {
                         puts "WebSocket connection open"
         
                         sid = @channel.subscribe { |msg| ws.send msg }           
-                        # publish message to the client
-                        #ws.send "Hello Client"
                         ws.onclose {
                                 puts "Connection closed"
                                 @channel.unsubscribe(sid)
@@ -18,11 +16,11 @@ EventMachine.run {
                 
                         ws.onmessage { |msg|
                                 puts "Recieved message: #{msg}"
-                                changes = eval(msg);
-                                p changes
-                                @channel.unsubscribe(sid)
-                                @channel.push "#{changes.to_json}"
-                                sid = @channel.subscribe { |msg| ws.send msg }           
+                                changes = JSON.parse(msg)
+                                p msg
+                                        @channel.unsubscribe(sid)
+                                        @channel.push "#{changes.to_json}"
+                                        sid = @channel.subscribe { |msg| ws.send msg }           
                         }
                 }
         
