@@ -5,7 +5,6 @@ var message_on_disconnect = "The web Socket Server is experiencing problems. We 
 function init() { 
 	output = document.getElementById("output");
 	testWebSocket();
-	subscribe(); 
 }  
 function testWebSocket() { 
 	websocket = new WebSocket(wsUri); 
@@ -30,6 +29,7 @@ function subscribe(){
 
 function onOpen(evt) { 
 	writeToScreen("initial content"); 
+	subscribe(); 
 }  
 function onClose(evt) { alert(message_on_disconnect);}  
 

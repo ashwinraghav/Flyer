@@ -18,10 +18,12 @@ EventMachine.run {
                                 puts "Recieved message: #{msg}"
                                 changes = JSON.parse(msg)
                                 p msg
-                                        @channel.unsubscribe(sid)
+				unless(changes["subscription_message"])
+					@channel.unsubscribe(sid)
                                         @channel.push "#{changes.to_json}"
-                                        sid = @channel.subscribe { |msg| ws.send msg }           
-                        }
+                                	sid = @channel.subscribe { |msg| ws.send msg }           
+                        	end
+			}
                 }
         
         end
