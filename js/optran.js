@@ -49,6 +49,10 @@ function onMessage(evt) {
 	var a = eval('(' + evt.data + ')');
 	if(a["subscription_message"]){
 		subscription_ids = a["subscription_ids"];
+	}else if(a["query"]){
+		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
+		$(str)[0].trigger("change");
+
 	}else{
 		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
 		$(str)[0].innerHTML = a["char"];

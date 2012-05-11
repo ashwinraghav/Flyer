@@ -1,6 +1,14 @@
 require 'eventmachine'
 require 'em-websocket'
 require 'json'
+module EventMachine
+        class Channel
+               def subs
+                        return @subs
+               end
+        end
+end
+
 EventMachine.run {
         @channels = {}
 
@@ -20,19 +28,26 @@ EventMachine.run {
                                 puts "Recieved message: #{msg}"
                                 p msg
 				if(!received_message["subscription_message"])
-                                        channel = @channels[received_message["data-sync_id"]]
+                                        channel = @channels[received_message["data-sync-id"]]
+                                        p channel.subs
                                         channel.push "#{received_message.to_json}"
                                 else
-                                        channel = @channels[received_message["data-sync-id"]]
-                                        if channel.nil?
-                                                channel = EM::Channel.new
-                                                @channels[received_message["data-sync-id"]] = channel
+                                        leaders =[];
+                                        received_message["subscriptions"].each do |subscription|
+                                                if @channels[subscription].nil?
+                                                        @channels[subscription] = EM::Channel.new
+                                                else
+                                                        leaders << @channels[subscription].subs.values.first
+                                                end
                                         end
+
                                         return_ids = {}
                                         received_message["subscriptions"].each do |subscription|
-                                                return_ids[subscription.to_s] = channel.subscribe{|msg| ws.send msg}
+                                                return_ids[subscription.to_s] = @channels[subscription].subscribe{|msg| ws.send msg}
                                         end
+
                                         ws.send({:subscription_message => true, :subscription_ids => return_ids}.to_json)
+                                        leaders.each { |l| l.call({"query" => true}.to_json) }
                         	end
 			}
                 }
