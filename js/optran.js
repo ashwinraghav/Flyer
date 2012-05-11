@@ -31,7 +31,9 @@ function onOpen(evt) {
 	writeToScreen("initial content"); 
 	subscribe(); 
 }  
-function onClose(evt) { alert(message_on_disconnect);}  
+function onClose(evt) { 
+//alert(message_on_disconnect);
+}  
 
 function onMessage(evt) {
 	var a = eval('(' + evt.data + ')');
