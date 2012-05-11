@@ -1,11 +1,12 @@
 var wsUri = "ws://128.143.137.142:8080"; 
 var output;  
 var message={};
+var subscription_ids = {}
 var message_on_disconnect = "The web Socket Server is experiencing problems. We are unable to maintain consistent states across concurrent sessions on this document";
 function init() { 
-	output = document.getElementById("output");
 	testWebSocket();
 }  
+
 function testWebSocket() { 
 	websocket = new WebSocket(wsUri); 
 	websocket.onopen = function(evt) { onOpen(evt) }; 
@@ -27,27 +28,39 @@ function subscribe(){
 	websocket.send(JSON.stringify(subscribe_message));
 }
 
+function bootstrap(){
+	$('[data-synchronize = "true"]').each(
+		function(element){
+			$(this)[0].innerHTML = "intial content";
+		}
+	);
+}
+
 function onOpen(evt) { 
-	writeToScreen("initial content"); 
+	bootstrap();
 	subscribe(); 
 }  
+
 function onClose(evt) { 
-//alert(message_on_disconnect);
+	//alert(message_on_disconnect);
 }  
 
 function onMessage(evt) {
 	var a = eval('(' + evt.data + ')');
-	document.getElementById('output').innerHTML = a["char"];
+	if(a["subscription_message"]){
+		subscription_ids = a["subscription_ids"];
+	}else{
+		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
+		$(str)[0].innerHTML = a["char"];
+	}
 }  
 
-function onError(evt) { alert(evt.data); } 
+function onError(evt) {
+	alert(evt.data); 
+} 
 
-function doSend(message) {websocket.send(JSON.stringify(message)); } 
-
-function writeToScreen(message) { 
-	var content = document.getElementById('output').innerHTML;
-
-	document.getElementById('output').innerHTML= message;
+function doSend(message) {
+	websocket.send(JSON.stringify(message)); 
 } 
 
 window.addEventListener("load", init, false);  
@@ -60,21 +73,10 @@ $('[data-synchronize="true"]').live('focus', function() {
 			});
 
 $('[data-synchronize="true"]').live('change', function(e) {
-		message["data-sync-id"]=$(this).attr('data-sync-id');
+		content = $(this).html();
+		message["char"]=content;
+		message["data-sync-id"] = $(this).attr('data-sync-id');
+		message["subscription_id"] = subscription_ids[$(this).attr('data-sync-id')];
 		message["subscription_message"]=false;
 		doSend(message);
 });
-
-function find_chars_pressed(e){
-	content = document.getElementById('output').innerHTML;
-	message["char"]=content;
-}
-
-function findNode(list, node) {
-	for (var i = 0; i < list.length; i++) {
-		if (list[i] == node) {
-			return i;
-		}
-	}
-	return -1;
-}
