@@ -32,7 +32,7 @@ function subscribe(){
 function bootstrap(){
 	$('[data-synchronize = "true"]').each(
 		function(element){
-			$(this)[0].innerHTML = "intial content";
+			$(this)[0].value = "intial content";
 		}
 	);
 }
@@ -58,7 +58,7 @@ function onMessage(evt) {
 
 	}else if (!sent_by_me(a)){
 		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
-		$(str)[0].innerHTML = a["char"];
+		$(str)[0].value = a["char"];
 	}
 }  
 
@@ -75,14 +75,14 @@ function doSend(message) {
 window.addEventListener("load", init, false);  
 
 $('[data-synchronize="true"]').live('focus', function() {
-		before = $(this).html();
+		before = $(this).value;
 
 		}).live('blur keyup paste', function() {
 			if (before != $(this).html()) { $(this).trigger('change'); }
 			});
 
 $('[data-synchronize="true"]').live('change', function(e) {
-		content = $(this).html();
+		content = $(this)[0].value;
 		message["char"]=content;
 		message["data-sync-id"] = $(this).attr('data-sync-id');
 		message["subscription_id"] = subscription_ids[$(this).attr('data-sync-id')];
