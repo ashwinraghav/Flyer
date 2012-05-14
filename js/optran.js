@@ -50,8 +50,9 @@ function onMessage(evt) {
 	if(a["subscription_message"]){
 		subscription_ids = a["subscription_ids"];
 	}else if(a["query"]){
+		alert("being queried");
 		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
-		$(str)[0].trigger("change");
+		$(str).trigger("change");
 
 	}else{
 		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
