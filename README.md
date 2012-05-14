@@ -1,4 +1,4 @@
-Optran is a lightweigt ruby asynchronous server and client component that can help you build operational transformation into your web application.
+Optran is a lightweigt ruby asynchronous server and javascript client component that can help you build operational transformation into your web application.
 
 What is Operational Transformation?
 The internet is CRUD. In an incredible surprise move, consider 2 users editing the profile of the same employee record. There are 2 parts to the user experience that are not deterministic:
@@ -18,3 +18,8 @@ Steps to incorporate Optran(I will gemify this soon):
         5) Copy this javascript file into the public folder of your web application
 
 Thats is you are ready to go. Take a look at the examples in the examples folder to see how to get started.
+
+Credits
+Ashwin Raghav Mohan Ganesh
+Kevin Sullivan
+Univ of Virginia
