@@ -2,6 +2,7 @@ var wsUri = "ws://128.143.137.142:8080";
 var output;  
 var message={};
 var subscription_ids = {}
+var message_identity;
 var message_on_disconnect = "The web Socket Server is experiencing problems. We are unable to maintain consistent states across concurrent sessions on this document";
 function init() { 
 	testWebSocket();
@@ -42,9 +43,11 @@ function onOpen(evt) {
 }  
 
 function onClose(evt) { 
-	//alert(message_on_disconnect);
+	alert(message_on_disconnect);
 }  
-
+function sent_by_me(a){
+	return(a["message_identity"] == message_identity)
+}
 function onMessage(evt) {
 	var a = eval('(' + evt.data + ')');
 	if(a["subscription_message"]){
@@ -53,7 +56,7 @@ function onMessage(evt) {
 		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
 		$(str).trigger("change");
 
-	}else{
+	}else if (!sent_by_me(a)){
 		var str = "[data-sync-id = " + a["data-sync-id"] + "]";
 		$(str)[0].innerHTML = a["char"];
 	}
@@ -64,6 +67,8 @@ function onError(evt) {
 } 
 
 function doSend(message) {
+	message_identity = Math.floor(Math.random()*20000000);
+	message["message_identity"] = message_identity;
 	websocket.send(JSON.stringify(message)); 
 } 
 
