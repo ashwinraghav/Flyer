@@ -17,7 +17,11 @@ Steps to incorporate Optran(I will gemify this soon):
         4) The javascript file in js/optran.js contains a statement var wsUri = "ws://localhost:8080". Change this to the IP address of the machine where step-2 was carried out.
         5) Copy this javascript file into the public folder of your web application
 
+If you have suggestions on how this can be made more pluggable, send out a mail to ashwinraghav at gmail.com.
+
 Thats is you are ready to go. Take a look at the examples in the examples folder to see how to get started.
+At present, flyer is compatible with only browsers that support web-sockets that lies at the core of how it works. 
+
 
 Credits
 Ashwin Raghav Mohan Ganesh
